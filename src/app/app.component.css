@@ -1,0 +1,19 @@
+td{
+  padding-top: 0.25rem!important;
+  padding-bottom: 0.25rem!important;
+}
+
+.slot{
+  display: inline;
+  padding-left: 7px;
+  padding-right: 7px;
+  border: 1px solid gray;
+}
+
+.slot-used{
+  background-color: #c4bcb1;
+}
+
+div:slot(n+2) {
+    margin-left: -1px;
+}
