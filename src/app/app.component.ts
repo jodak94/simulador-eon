@@ -29,7 +29,7 @@ export class AppComponent {
       if(_this.ksp.length > 0)
         _this.limpiarGrafo()
       if(data != undefined){
-        _this.demand = {"from" : data.path[0].from, "to" : data.path[data.path.length-1].to}
+        _this.demand = {"from" : data.from, "to" : data.to}
         _this.ejecutarDemandaAsync(data)
       }
     });
@@ -42,7 +42,6 @@ export class AppComponent {
       spectrum.fill(false);//libre
       link.spectrum = spectrum;
     });
-    console.log(this.links);
     this.messageService.sendMessage(this.options);
   }
 
@@ -62,7 +61,7 @@ export class AppComponent {
 
   initOptions(){
     this.options = new Options();
-    this.options.time = 5;
+    this.options.time = 10;
     this.options.topology = "NSFNet";
     this.options.fsWidth = 12.5;
     this.options.capacity = 16;
@@ -84,23 +83,20 @@ export class AppComponent {
 
   ejecutarDemandaAsync(data){
     this.ksp = data.path;
-    this.nodes[data.path[0].from].color = "#f7a1a1";
-    this.nodes[data.path[data.path.length - 1].to].color = "#f7a1a1";
+    this.nodes[data.from].color = "#f7a1a1";
+    this.nodes[data.to].color = "#f7a1a1";
     let linkId;
     let link;
     data.path.forEach((l, i) => {
       linkId = l.from < l.to ? "l"+l.from+l.to : "l"+l.to+l.from
       link = this.links.find(i => i.id == linkId)
       link.color="#f7a1a1";
-      // this.links.cores
-      console.log(link);
 
       for (let i = data.fsIndexBegin; i < data.fs; i++) {
         link.spectrum[i] = true;
       }
       this.update$.next(true);
     })
-    console.log(this.links);
   }
 
   ejecutarDemanda(demandas){
@@ -112,9 +108,7 @@ export class AppComponent {
     let x = 0;
 
     demandas.forEach(async (demanda, index) => {
-      // console.log("demanda: " + demanda)
       ksp = this.ksp[index];
-      // console.log(ksp)
       this.nodes[demanda.from].color = "#f7a1a1";
       this.nodes[demanda.to].color = "#f7a1a1";
       if(index == 0)
@@ -125,23 +119,20 @@ export class AppComponent {
       ksp.forEach(async (k, i) => {
           await this.wait((i)*1000);
           linkId = "l"+k.from+k.to;
-          console.log(linkId)
           this.links.find(i => i.id == linkId).color="#f7a1a1";
           this.update$.next(true);
-          // console.log("dentro: " + acu + " para :" + i)
           // await(1000)
       });
       acuL = (ksp.length + 2) * 1000;
       await this.wait(4000)
-      console.log("termino demanda")
     });
 
   }
 
   limpiarGrafo(){
     let linkId;
-    this.nodes[this.ksp[0].from].color = "#c4bcb1";
-    this.nodes[this.ksp[this.ksp.length - 1].to].color = "#c4bcb1";
+    this.nodes[this.demand.from].color = "#c4bcb1";
+    this.nodes[this.demand.to].color = "#c4bcb1";
     this.ksp.forEach((k, i) => {
         linkId = k.from < k.to ? "l"+k.from+k.to : "l"+k.to+k.from
         linkId = "l"+k.from+k.to;
