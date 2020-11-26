@@ -19,7 +19,9 @@
           [attr.rx]="node.dimension.width"
           [attr.ry]="node.dimension.width"
           [attr.fill]="node.color"
-        />
+        >
+
+      </svg:rect>
         <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
           {{node.label}}
         </svg:text>
@@ -27,10 +29,18 @@
     </ng-template>
     <ng-template #linkTemplate let-link>
       <svg:g class="edge">
-        <svg:path class="line"
+        <!-- <svg:path class="line"
           stroke-width="2"
           [attr.stroke]="link.color"
-          marker-end="url(#arrow)"></svg:path>
+          marker-end="url(#arrow)"></svg:path> -->
+          <svg:path
+            [class]="link.class"
+            stroke-width="2"
+            [attr.stroke]="link.color"
+            marker-end="url(#arrow)"
+            d="M 10,75 L 290,75"
+            >
+          </svg:path>
         <svg:text class="edge-label" text-anchor="middle">
           <textPath
             class="text-path"

@@ -17,3 +17,25 @@ td{
 div:slot(n+2) {
     margin-left: -1px;
 }
+
+@keyframes colorChange {
+    0%{fill:#ff0000}
+    50%{fill:#000}
+    100%{fill: #ff0000}
+}
+.box {
+    width:200px;
+    height:200px;
+    animation: colorChange 3s infinite;
+}
+
+.pen {
+  stroke-dasharray: 5;
+  animation: dash 30s linear;
+}
+
+@keyframes dash  {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}

@@ -50,7 +50,7 @@ export class AppComponent {
     net.network.forEach((node, id) => {
       this.nodes.push({'id' : id.toString(), 'label' : id, 'color' : '#c4bcb1'})
       node.connections.forEach((c, index)=> {
-        this.links.push({'id' : "l"+id+c, 'source' : id.toString(), 'target' : c.toString(), 'label' : node.distance[index], 'color' : '#524b4b'})
+        this.links.push({'id' : "l"+id+c, 'source' : id.toString(), 'target' : c.toString(), 'label' : node.distance[index], 'color' : '#524b4b', 'class' : 'line'})
         lid++;
       });
     });
@@ -91,7 +91,7 @@ export class AppComponent {
       linkId = l.from < l.to ? "l"+l.from+l.to : "l"+l.to+l.from
       link = this.links.find(i => i.id == linkId)
       link.color="#f7a1a1";
-
+      link.class = "line pen"
       for (let i = data.fsIndexBegin; i < data.fs; i++) {
         link.spectrum[i] = true;
       }
@@ -137,6 +137,7 @@ export class AppComponent {
         linkId = k.from < k.to ? "l"+k.from+k.to : "l"+k.to+k.from
         linkId = "l"+k.from+k.to;
         this.links.find(i => i.id == linkId).color="#524b4b";
+        this.links.find(i => i.id == linkId).class="line";
         this.update$.next(true);
     });
   }
