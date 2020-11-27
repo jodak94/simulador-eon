@@ -29,7 +29,7 @@ export class AppComponent {
     messageService.msg.subscribe(data => {
       let ksp;
       let demand;
-      console.log(data.end)
+      console.log(data)
       if(_this.ksp.length > 0 || (data.end != undefined && data.end == true))
         _this.limpiarGrafo()
       if(data != undefined && data.end == undefined){
@@ -98,9 +98,11 @@ export class AppComponent {
       link = this.links.find(i => i.id == linkId)
       link.color=this.useColor;
       link.class = "line pen"
-      for (let i = data.fsIndexBegin; i < data.fs; i++) {
+      for (let i = data.fsIndexBegin; i <  data.fsIndexBegin + data.fs; i++) {
         link.spectrum[i] = true;
       }
+      console.log(linkId)
+      console.log(link.spectrum)
       this.update$.next(true);
     })
   }
