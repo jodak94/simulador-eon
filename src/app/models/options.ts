@@ -9,4 +9,5 @@ export class Options {
     fsRangeMax: number
     cores: number
     routingAlg: string;
+    k: number;
 }

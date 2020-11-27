@@ -8,16 +8,18 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { NO_ERRORS_SCHEMA,CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,  
     AppRoutingModule,
     BrowserAnimationsModule,
     NgxGraphModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [
     SimuladorService,

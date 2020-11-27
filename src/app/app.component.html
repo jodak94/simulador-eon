@@ -1,84 +1,229 @@
 <!-- <div style="width: 100%; height : 700px"> -->
 
 <div class="row">
-  <div class="col-md-7" style="display: grid">
-    <ngx-graph
-      class="chart-container"
-      [view]="[900, 800]"
-      [links]="links"
-      [nodes]="nodes"
-      [curve]="curve"
-      [animate]="true"
-      [update$]="update$"
-    >
-    <ng-template #nodeTemplate let-node>
-      <svg:g class="node" ngx-tooltip [tooltipPlacement]="'top'" [tooltipType]="'tooltip'" [tooltipTitle]="node.label">
-        <svg:rect
-          [attr.width]="node.dimension.width"
-          [attr.height]="node.dimension.width"
-          [attr.rx]="node.dimension.width"
-          [attr.ry]="node.dimension.width"
-          [attr.fill]="node.color"
-        >
-
-      </svg:rect>
-        <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
-          {{node.label}}
-        </svg:text>
-      </svg:g>
-    </ng-template>
-    <ng-template #linkTemplate let-link>
-      <svg:g class="edge">
-        <!-- <svg:path class="line"
-          stroke-width="2"
-          [attr.stroke]="link.color"
-          marker-end="url(#arrow)"></svg:path> -->
-          <svg:path
-            [class]="link.class"
-            stroke-width="2"
-            [attr.stroke]="link.color"
-            marker-end="url(#arrow)"
-            d="M 10,75 L 290,75"
-            >
-          </svg:path>
-        <svg:text class="edge-label" text-anchor="middle">
-          <textPath
-            class="text-path"
-            [attr.href]="'#' + link.id"
-            [style.dominant-baseline]="link.dominantBaseline"
-            startOffset="50%"
-          >
-            {{link.label}}
-          </textPath>
-        </svg:text>
-      </svg:g>
-    </ng-template>
-    </ngx-graph>
-  <!-- </div> -->
+  <div class="col-md-12 margin-bottom">
+    <div class="card titlecard">
+      <div class="row">
+        <div class="col-md-12">
+          <h5 class="margin-top" style="margin-bottom: 0">Simulador de redes EON con multiples núcleos</h5>
+          <h6>Desfragmentación basada en Machine learning</h6>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-md-5">
-    <div class="row">
-      <div class="col-md-6">
-        <button class="btn btn-primary" (click)="iniciarSimulacion()">Simular</button>
+  <div class="col-md-7" style="display: grid">
+    <div class="card graph-container">
+      <div class="row">
+        <div class="col-md-6">
+          <b>Topología:</b> {{options.topology}}
+        </div>
+        <div class="col-md-6"  *ngIf="demand">
+          <span class="demand-label">Demanda: De 1 a {{demand.to}} <br> Slots de frecuencia: {{demand.fs}} <br> Tiempo de vida: {{demand.tl}}</span>
+        </div>
       </div>
-      <div class="col-md-6" *ngIf="demand">
-        Demanda Actual - De:{{demand.from}} A:  {{demand.to}}
+      <ngx-graph
+        class="chart-container"
+        [links]="links"
+        [nodes]="nodes"
+        [curve]="curve"
+        [animate]="true"
+        [zoomLevel]="0.8"
+        [update$]="update$"
+        [view]="[900, 700]"
+      >
+      <ng-template #nodeTemplate let-node>
+        <svg:g class="node" ngx-tooltip [tooltipPlacement]="'top'" [tooltipType]="'tooltip'" [tooltipTitle]="node.label">
+          <svg:rect
+            [attr.width]="node.dimension.width"
+            [attr.height]="node.dimension.width"
+            [attr.rx]="node.dimension.width"
+            [attr.ry]="node.dimension.width"
+            [attr.fill]="node.color"
+          >
+
+        </svg:rect>
+          <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
+            {{node.label}}
+          </svg:text>
+        </svg:g>
+      </ng-template>
+      <ng-template #linkTemplate let-link>
+        <svg:g class="edge">
+            <svg:path
+              [class]="link.class"
+              stroke-width="2"
+              [attr.stroke]="link.color"
+              marker-end="url(#arrow)"
+              d="M 10,75 L 290,75"
+              >
+            </svg:path>
+          <svg:text class="edge-label" text-anchor="middle">
+            <textPath
+              class="text-path"
+              [attr.href]="'#' + link.id"
+              [style.dominant-baseline]="link.dominantBaseline"
+              startOffset="50%"
+            >
+              {{link.label}}
+            </textPath>
+          </svg:text>
+        </svg:g>
+      </ng-template>
+      </ngx-graph>
+    </div>
+  </div>
+  <div class="col-md-5" style="padding-left:0"p>
+    <div class="card">
+      <div class="row">
+        <div class="col-md-6 center">
+          <button class="btn btn-des" data-toggle="modal" data-target="#exampleModal">Opciones de Simulación</button>
+        </div>
+        <div class="col-md-6 center">
+          <button class="btn btn-des" (click)="iniciarSimulacion()">Iniciar Simulación</button>
+        </div>
+
+        <div class="col-md-12" *ngIf="simulanding">
+          <table  class="table">
+            <thead>
+              <th width="10%">Enlace</th>
+              <th width="90%">Estado</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let l of links">
+                <td>{{l.id}}</td>
+                <td>
+                  <div *ngFor="let slot of l.spectrum" [ngClass]="!slot ? 'slot' : 'slot slot-used'"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="col-md-12">
-        <table  class="table">
-          <thead>
-            <th width="10%">Enlace</th>
-            <th width="90%">Estado</th>
-          </thead>
-          <tbody>
-            <tr *ngFor="let l of links">
-              <td>{{l.id}}</td>
-              <td>
-                <div *ngFor="let slot of l.spectrum" [ngClass]="!slot ? 'slot' : 'slot slot-used'"></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Opciones de simulación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
+      <div class="modal-body">
+
+        <div class="row" *ngIf="options">
+          <div class="col-md-12">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Tiempo de simulación (Unidades)</span>
+              </div>
+              <input [(ngModel)]="options.time" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-12  margin-top">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Topología</span>
+              </div>
+              <select class="form-control" [(ngModel)]="options.topology">
+                <option>NSFNet</option>
+                <option>ARPA-2</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Ancho FS (Ghz)</span>
+              </div>
+              <input [(ngModel)]="options.fsWidth" type="text" class="form-control" disabled>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Capacidad (Cantidad de slots por enlace)</span>
+              </div>
+              <input [(ngModel)]="options.capacity" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Cantidad de núcleos</span>
+              </div>
+              <input [(ngModel)]="options.cores" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Tráfico máximo (Erlang)</span>
+              </div>
+              <input [(ngModel)]="options.erlang" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Lambda (Distribución de poisson para la generación de demandas)</span>
+              </div>
+              <input [(ngModel)]="options.lambda" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-4" style="padding-right: 0px">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend no-right-border-radius" style="width: 100%;">
+                <span class="input-group-text" style="width: 100%;">Rango de Fs utilizable por demanda</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" style="padding-right: 0px; padding-left: 0px">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text no-left-border-radius" style="border-left: 0px">Min</span>
+              </div>
+              <input [(ngModel)]="options.fsRangeMin" type="text" class="form-control  no-right-border-radius">
+            </div>
+          </div>
+          <div class="col-md-4" style="padding-left: 0px">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text no-left-border-radius"  style="border-left: 0px">Max</span>
+              </div>
+              <input [(ngModel)]="options.fsRangeMax" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Algorimo de Ruteo</span>
+              </div>
+              <select [(ngModel)]="options.routingAlg" class="form-control">
+                <option value="fa">FA</option>
+                <option value="faca">FA-CA</option>
+                <option value="mtlsc">MTLSC</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group margin-top">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Coeficiente k para el algoritmo KSP</span>
+              </div>
+              <input [(ngModel)]="options.k" type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
   </div>
 </div>

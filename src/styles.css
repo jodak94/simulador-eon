@@ -1,4 +1,120 @@
 /* You can add global styles to this file, and also import other style files */
+.row{
+  margin-right: unset!important;
+  margin-left: unset!important;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.margin-top{
+  margin-top: .5rem;
+}
+
+.container-d{
+  -margin-top: 15px;
+}
+
+.margin-bottom{
+  margin-bottom: 15px;
+}
+
+.card{
+  background-color: #EEEEEE;
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  color: #3C4858;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.input-group-text{
+  font-size: 0.75rem!important;
+}
+
+.form-control{
+  font-size: 0.75rem!important;
+}
+
+.titlecard{
+  background-color: #999999;
+  color: white;
+}
+
+.no-padding{
+  padding: 0;
+}
+
+.padding-left{
+  padding: 0 0 0 15px;
+}
+
+.padding-right{
+  padding: 0 15px 0 0;
+}
+
+body{
+  background-color: #EEEEEE;
+  font-weight: 300;
+}
+
+.btn-des{
+  color: #fff;
+  border: 1px solid #ced4da;
+  background-color: #999999!important;
+  /* font-size: 0.75rem!important; */
+  /* float: right; */
+}
+
+.center{
+  text-align: center;
+}
+
+.btn-des:hover{
+  color: #D6D6D6;
+}
+
+.table td, .table th{
+  padding: .5rem;
+}
+
+th{
+  font-weight: 600;
+}
+
+.right{
+  float: right;
+  text-align: right;
+}
+
+.resultados-card{
+  font-size: 0.75rem!important;
+}
+
+.vertical-text{
+  transform: rotate(-90deg);
+}
+
+.canvasjs-chart-toolbar{
+  display: none!important;
+}
+
+.demand-label{
+  position: relative;
+  top: 6rem;
+  float: right;
+  padding: 3px;
+  border: 1px solid #ced4da;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.no-right-border-radius{
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.no-border-radius{
+  border-radius: 0px;
+}
+
+.no-left-border-radius{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}

@@ -1,12 +1,18 @@
 td{
-  padding-top: 0.25rem!important;
-  padding-bottom: 0.25rem!important;
+  padding-top: 0rem!important;
+  padding-bottom: 0rem!important;
+  font-size: 0.75rem;
+}
+
+th{
+  padding-top: 0rem!important;
+  padding-bottom: 0rem!important;
 }
 
 .slot{
   display: inline;
-  padding-left: 7px;
-  padding-right: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
   border: 1px solid gray;
 }
 
@@ -30,12 +36,38 @@ div:slot(n+2) {
 }
 
 .pen {
-  stroke-dasharray: 5;
+  stroke-dasharray: 2;
   animation: dash 30s linear;
 }
 
 @keyframes dash  {
   to {
     stroke-dashoffset: 1000;
+  }
+}
+
+.init-a{
+  width: 100%;
+  position: absolute;
+  height: 5px;
+  background-color: dodgerblue;
+  animation-name: loader-animation;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes loader-animation {
+  0% {
+    left: -100%;
+  }
+  49% {
+    left: 100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: -100%;
   }
 }
