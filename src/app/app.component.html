@@ -17,8 +17,8 @@
         <div class="col-md-6">
           <b>Topología:</b> {{options.topology}}
         </div>
-        <div class="col-md-6"  *ngIf="demand">
-          <span class="demand-label">Demanda: De {{demand.from}} a {{demand.to}} <br> Slots de frecuencia: {{demand.fs}} <br> Tiempo de vida: {{demand.tl}}</span>
+        <div class="col-md-6" *ngIf="demand">
+          <span [ngClass]="{'demand-label' : true, 'demand-blocked' : this.blocked }">Demanda: De {{demand.from}} a {{demand.to}} <br> Slots de frecuencia: {{demand.fs}} <br> Tiempo de vida: {{demand.tl}} <span *ngIf="this.blocked"><br>--Bloqueado--</span></span>
         </div>
       </div>
       <ngx-graph
@@ -147,7 +147,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">Capacidad (Cantidad de slots por enlace)</span>
               </div>
-              <input [(ngModel)]="options.capacity" type="text" class="form-control">
+              <input [(ngModel)]="options.capacity" type="number" class="form-control">
             </div>
           </div>
           <div class="col-md-12">

@@ -105,6 +105,11 @@ th{
   font-size: 0.9rem;
 }
 
+.demand-blocked{
+  color: #c92822;
+  border: 1px solid #c92822;
+}
+
 .no-right-border-radius{
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;

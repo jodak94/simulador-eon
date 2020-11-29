@@ -23,15 +23,34 @@ export class AppComponent {
   cNodeColor = '#c4bcb1'
   cLinkColor = '#524b4b';
   simulanding = false;
-
+  blocked = true;
   constructor(private messageService: SimuladorService) {
     let _this = this;
     messageService.msg.subscribe(data => {
       let ksp;
       let demand;
       console.log(data)
-      if(_this.ksp.length > 0 || (data.end != undefined && data.end == true))
+      if(data.released != undefined && data.released){
+        _this.links.find(i => i.id == data.link).spectrum[data.slot] = false;
+        return;
+      }
+      if(data.end != undefined && data.end == true){
         _this.limpiarGrafo()
+        _this.cleanLinks();
+        _this.demand = null;
+        return;
+      }
+      if(data.blocked){
+          _this.blocked = true;
+          if(_this.ksp.length > 0)
+            _this.limpiarGrafo()
+          return;
+      }
+
+      if(_this.ksp.length > 0)
+        _this.limpiarGrafo()
+
+      _this.blocked = false;
       if(data != undefined && data.end == undefined){
         _this.demand = {"from" : data.from, "to" : data.to, "fs" : data.fs, "tl" : data.timeLife}
         _this.ejecutarDemandaAsync(data)
@@ -40,14 +59,20 @@ export class AppComponent {
   }
 
   iniciarSimulacion () {
+    console.log('iniciarSimulacion')
     this.simulanding = true;
+    this.cleanLinks()
+    this.ksp = [];
+    this.messageService.sendMessage(this.options);
+  }
+
+  cleanLinks () {
     let spectrum;
     this.links.forEach(link => {
       spectrum = new Array(this.options.capacity);
       spectrum.fill(false);//libre
       link.spectrum = spectrum;
     });
-    this.messageService.sendMessage(this.options);
   }
 
   ngOnInit() {
@@ -101,8 +126,6 @@ export class AppComponent {
       for (let i = data.fsIndexBegin; i <  data.fsIndexBegin + data.fs; i++) {
         link.spectrum[i] = true;
       }
-      console.log(linkId)
-      console.log(link.spectrum)
       this.update$.next(true);
     })
   }
