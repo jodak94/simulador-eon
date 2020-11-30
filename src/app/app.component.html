@@ -14,10 +14,11 @@
   <div class="col-md-7" style="display: grid">
     <div class="card graph-container">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <b>Topología:</b> {{options.topology}}
         </div>
-        <div class="col-md-6" *ngIf="demand">
+        <div class="col-md-4" *ngIf="simulanding">Tiempo: {{time}}</div>
+        <div class="col-md-4" *ngIf="demand">
           <span [ngClass]="{'demand-label' : true, 'demand-blocked' : this.blocked }">Demanda: De {{demand.from}} a {{demand.to}} <br> Slots de frecuencia: {{demand.fs}} <br> Tiempo de vida: {{demand.tl}} <span *ngIf="this.blocked"><br>--Bloqueado--</span></span>
         </div>
       </div>
@@ -83,16 +84,17 @@
         </div>
 
         <div class="col-md-12" *ngIf="simulanding">
-          <table  class="table">
+          <table  class="table" style="margin-top: 15px">
             <thead>
-              <th width="10%">Enlace</th>
-              <th width="90%">Estado</th>
+              <th colspan="2">Espectro de los enlaces</th>
             </thead>
             <tbody>
               <tr *ngFor="let l of links">
-                <td>{{l.id}}</td>
-                <td>
-                  <div *ngFor="let slot of l.spectrum" [ngClass]="!slot ? 'slot' : 'slot slot-used'"></div>
+                <td width="5%" class="vertical-middle">{{l.id}}</td>
+                <td width="95%">
+                  <div *ngFor="let core of l.cores; let i = index">
+                    <div *ngFor="let slot of core" [ngClass]="!slot ? 'slot' : 'slot slot-used'"></div>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -155,7 +157,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">Cantidad de núcleos</span>
               </div>
-              <input [(ngModel)]="options.cores" type="text" class="form-control">
+              <input [(ngModel)]="options.cores" type="number" class="form-control">
             </div>
           </div>
           <div class="col-md-12">

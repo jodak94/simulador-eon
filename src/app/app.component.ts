@@ -24,6 +24,7 @@ export class AppComponent {
   cLinkColor = '#524b4b';
   simulanding = false;
   blocked = true;
+  time = 0;
   constructor(private messageService: SimuladorService) {
     let _this = this;
     messageService.msg.subscribe(data => {
@@ -31,13 +32,19 @@ export class AppComponent {
       let demand;
       console.log(data)
       if(data.released != undefined && data.released){
-        _this.links.find(i => i.id == data.link).spectrum[data.slot] = false;
+        _this.time = data.time;
+        data.releasedSlots.forEach(releaseSlot => {
+          _this.links.find(i => i.id == releaseSlot.link).cores[releaseSlot.core][releaseSlot.slot] = false;
+        });
+        // _this.links.find(i => i.id == data.link).cores[data.core][data.slot] = false;
         return;
       }
       if(data.end != undefined && data.end == true){
         _this.limpiarGrafo()
-        _this.cleanLinks();
+        // _this.cleanLinks();
+        _this.time = 0;
         _this.demand = null;
+        _this.simulanding = false;
         return;
       }
       if(data.blocked){
@@ -59,19 +66,24 @@ export class AppComponent {
   }
 
   iniciarSimulacion () {
-    console.log('iniciarSimulacion')
     this.simulanding = true;
     this.cleanLinks()
     this.ksp = [];
+    this.time = 0;
     this.messageService.sendMessage(this.options);
   }
 
   cleanLinks () {
     let spectrum;
+    let cores;
     this.links.forEach(link => {
-      spectrum = new Array(this.options.capacity);
-      spectrum.fill(false);//libre
-      link.spectrum = spectrum;
+      cores = new Array(this.options.cores);
+      for (let core = 0; core < cores.length; core++) {
+        spectrum = new Array(this.options.capacity);
+        spectrum.fill(false);//libre
+        cores[core] = spectrum
+      }
+      link.cores = cores;
     });
   }
 
@@ -91,16 +103,16 @@ export class AppComponent {
 
   initOptions(){
     this.options = new Options();
-    this.options.time = 1;
+    this.options.time = 20;
     this.options.topology = "NSFNet";
     this.options.fsWidth = 12.5;
-    this.options.capacity = 16;
+    this.options.capacity = 48;
     this.options.erlang = 100;
-    this.options.lambda = 5;
+    this.options.lambda = 3;
     this.options.fsRangeMin = 2;
     this.options.fsRangeMax = 6;
     this.options.routingAlg = "fa";
-    this.options.cores = 1;
+    this.options.cores = 2;
     this.options.k = 5;
   }
 
@@ -124,7 +136,7 @@ export class AppComponent {
       link.color=this.useColor;
       link.class = "line pen"
       for (let i = data.fsIndexBegin; i <  data.fsIndexBegin + data.fs; i++) {
-        link.spectrum[i] = true;
+        link.cores[data.core][i] = true;
       }
       this.update$.next(true);
     })
